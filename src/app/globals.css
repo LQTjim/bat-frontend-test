@@ -1,27 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  root {
+    --main: "#B5CC22";
+    --main-dark: "#677518";
+    --gray: "#EBEBEB";
+    --dark-gray: "#F6F6F6";
   }
-}
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  body,
+  a,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  div,
+  label,
+  span {
+    font-family: "Noto Sans TC", sans-serif;
+  }
+  select:focus,
+  :focus {
+    outline: none;
+  }
+  select {
+    /* 清除三角箭頭 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  select option {
+    background: #ebebeb;
+  }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  label:has(> .triangle) {
+    position: relative;
+  }
+  label:has(> .triangle)::before {
+    content: "";
+    position: absolute;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-top: 5px solid black;
+    top: 50%;
+    right: 10px;
+    z-index: 10;
+  }
 }
