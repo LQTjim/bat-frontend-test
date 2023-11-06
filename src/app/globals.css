@@ -27,30 +27,8 @@
   span {
     font-family: "Noto Sans TC", sans-serif;
   }
-  select:focus,
-  :focus {
+  input {
+    appearance: none;
     outline: none;
-  }
-  select {
-    /* 清除三角箭頭 */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-  select option {
-    background: #ebebeb;
-  }
-
-  label:has(> .triangle) {
-    position: relative;
-  }
-  label:has(> .triangle)::before {
-    content: "";
-    position: absolute;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    border-top: 5px solid black;
-    top: 50%;
-    right: 10px;
-    z-index: 10;
   }
 }

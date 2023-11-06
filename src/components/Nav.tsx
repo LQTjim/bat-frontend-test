@@ -20,7 +20,6 @@ function Nav() {
   useEffect(() => {
     const resizeCb = () => {
       setToggleOpen(false);
-      console.log("first");
     };
     window.addEventListener("resize", resizeCb);
 
@@ -36,7 +35,7 @@ cleanup解綁
  */
   useEffect(() => {
     if (toggleOpen) {
-      document.body.style.overflow = "visible";
+      document.body.style.overflow = "hidden";
     }
     return () => {
       document.body.style.overflow = "unset";

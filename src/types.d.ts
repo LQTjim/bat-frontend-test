@@ -4,7 +4,7 @@ interface SiteInfo {
   tot: number;
   sbi: number;
   sarea: string;
-  mday: Date;
+  mday: string;
   lat: number;
   lng: number;
   ar: string;
@@ -13,8 +13,8 @@ interface SiteInfo {
   aren: string;
   bemp: number;
   act: string;
-  srcUpdateTime: Date;
-  updateTime: Date;
-  infoTime: Date;
-  infoDate: Date;
+  srcUpdateTime: string;
+  updateTime: string;
+  infoTime: string;
+  infoDate: string;
 }

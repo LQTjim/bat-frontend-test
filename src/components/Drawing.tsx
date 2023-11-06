@@ -2,13 +2,13 @@
 import React, { useReducer } from "react";
 type DrawingState = {
   remain: number[];
+  beenDrew: number[];
   current: number;
   isDrawing: boolean;
 };
 interface ActionType {
   type: "drawing" | "reset";
 }
-//1,2 獎各只有一個, 3 獎有 2 個，4 獎有 5 個，5 獎有 11 個
 
 const init: DrawingState = {
   remain: [
@@ -19,33 +19,52 @@ const init: DrawingState = {
     ...Array<number>(5).fill(4),
     ...Array<number>(11).fill(5),
   ],
+  beenDrew: [],
   current: 0,
   isDrawing: false,
 };
 const prizesClassname: { [key: number]: string } = {
-  1: "bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300",
-  2: "bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300",
-  3: "bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300",
-  4: "bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300",
-  5: "bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300",
+  0: "bg-slate-100 text-slate-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
+  1: "bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
+  2: "bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
+  3: "bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
+  4: "bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
+  5: "bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded",
 };
 function reducer(state: DrawingState, action: ActionType) {
   const newRemain = [...state.remain];
-  const prizes = getPrizes();
+  const prize = getPrize();
   switch (action.type) {
     case "drawing":
-      console.log(prizes);
       /* 抽完了 */
       if (state.remain.length === 0) return { ...state };
       /* 抽到0 */
-      if (prizes === 0) return { ...state, current: 0, isDrawing: true };
-      /* 抽到沒剩餘獎項的*/
-      if (!state.remain.includes(prizes)) {
-        return { ...state, current: 0, isDrawing: true };
+      if (prize === 0) {
+        return {
+          ...state,
+          current: 0,
+          isDrawing: true,
+          beenDrew: [...state.beenDrew, 0],
+        };
+      }
+
+      if (!state.remain.includes(prize)) {
+        return {
+          ...state,
+          current: 0,
+          isDrawing: true,
+          beenDrew: [...state.beenDrew, 0],
+        };
       }
       /* 找到獎項index並移除一個 */
-      newRemain.splice(newRemain.indexOf(prizes), 1);
-      return { ...state, remain: newRemain, current: prizes, isDrawing: true };
+      newRemain.splice(newRemain.indexOf(prize), 1);
+      return {
+        ...state,
+        remain: newRemain,
+        beenDrew: [...state.beenDrew, prize],
+        current: prize,
+        isDrawing: true,
+      };
     case "reset":
       return init;
 
@@ -56,26 +75,30 @@ function reducer(state: DrawingState, action: ActionType) {
 export default function Drawing() {
   const [prizes, dispatch] = useReducer(reducer, init);
   const handleDrawingClick = () => {
+    console.log("first");
     dispatch({ type: "drawing" });
   };
   const handleResetClick = () => {
     dispatch({ type: "reset" });
   };
+
   return (
     <section>
       <div
         className="m-auto flex flex-col items-center justify-center 
       min-h-screen  bg-main "
       >
+        <h1>Quiz2</h1>
         <div>
           {!prizes.isDrawing
             ? "請抽獎"
-            : prizes.remain.length === 0 && prizes.current === 0
+            : prizes.remain.length === 0
             ? "抽完了"
             : prizes.current
             ? "抽到獎項" + prizes.current
             : "恭喜，安慰獎。"}
         </div>
+
         <div>
           <div className="mb-1 ">
             <div className="font-bold text-xl ">剩餘獎項:</div>
@@ -99,11 +122,20 @@ export default function Drawing() {
             重置獎項
           </button>
         </div>
+        {prizes.isDrawing && (
+          <div className="flex flex-wrap max-w-[500px]">
+            {prizes.beenDrew.map((v, i) => (
+              <div key={i + "beenDrew"} className={`${prizesClassname[v]}`}>
+                {(v === 0 && "安慰獎") || `獎項${v}`}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 }
-function getPrizes() {
+function getPrize() {
   /* 
   這邊只有固定住機率，沒有考慮獎池有沒有殘餘獎項。
 1 獎中獎機率為 0.1% 
